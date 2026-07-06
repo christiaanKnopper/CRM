@@ -1,0 +1,233 @@
+:root {
+  --navy: #0B1F3A;
+  --navy-licht: #13294B;
+  --teal: #14B8A6;
+  --teal-donker: #0D9488;
+  --inkt: #1F2937;
+  --stil: #6B7280;
+  --vlak: #F4F7FA;
+  --lijn: #D9E2EC;
+  --rood: #B91C1C;
+  --rood-vlak: #FDE2E2;
+  --oranje: #B45309;
+  --oranje-vlak: #FEF3C7;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, "Helvetica Neue", sans-serif;
+  color: var(--inkt);
+  background: var(--vlak);
+  font-size: 15px;
+}
+
+/* --- Kopbalk --- */
+.topbar {
+  background: var(--navy);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+}
+.merk { font-size: 18px; font-weight: bold; letter-spacing: 2px; }
+.merk span { color: var(--teal); font-weight: normal; letter-spacing: 0; }
+.stats { display: flex; gap: 8px; margin-left: auto; }
+.stat {
+  background: var(--navy-licht);
+  border: 1px solid transparent;
+  color: #cbd5e1;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.stat b { color: #fff; margin-right: 4px; }
+.stat.rood b { color: #FCA5A5; }
+.stat.oranje b { color: #FCD34D; }
+.stat:hover, .stat:focus-visible { border-color: var(--teal); }
+
+/* --- Algemeen --- */
+.view { max-width: 980px; margin: 0 auto; padding: 20px; }
+.knop {
+  background: var(--teal-donker);
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.knop:hover { background: var(--teal); }
+.knop-stil {
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--lijn);
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.topbar .knop-stil { color: #cbd5e1; border-color: var(--navy-licht); }
+.knop-gevaar {
+  background: transparent;
+  color: var(--rood);
+  border: 1px solid var(--rood);
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  margin-left: auto;
+}
+.knop-gevaar:hover { background: var(--rood-vlak); }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 1px;
+}
+.stil { color: var(--stil); }
+.fout { color: var(--rood); }
+.leeg { color: var(--stil); text-align: center; margin-top: 48px; }
+
+/* --- Login --- */
+.loginkaart {
+  background: #fff;
+  border: 1px solid var(--lijn);
+  border-top: 4px solid var(--teal);
+  border-radius: 8px;
+  max-width: 360px;
+  margin: 60px auto;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.loginkaart h1 { margin: 0; font-size: 20px; color: var(--navy); }
+.loginkaart input {
+  padding: 10px;
+  border: 1px solid var(--lijn);
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+/* --- Lijst --- */
+.werkbalk { display: flex; gap: 12px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+.werkbalk input[type="search"] {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 12px;
+  border: 1px solid var(--lijn);
+  border-radius: 6px;
+  font-size: 15px;
+}
+.lijst { display: flex; flex-direction: column; gap: 8px; }
+.rij {
+  background: #fff;
+  border: 1px solid var(--lijn);
+  border-left: 4px solid transparent;
+  border-radius: 6px;
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr auto;
+  gap: 8px 16px;
+  align-items: center;
+  cursor: pointer;
+}
+.rij:hover { border-color: var(--teal); }
+.rij.verlopen { border-left-color: var(--rood); }
+.rij.week { border-left-color: var(--oranje); }
+.rij .naam { font-weight: bold; color: var(--navy); }
+.rij .sub { color: var(--stil); font-size: 13px; }
+
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.badge.verlopen { background: var(--rood-vlak); color: var(--rood); }
+.badge.week { background: var(--oranje-vlak); color: var(--oranje); }
+.badge.later { background: var(--vlak); color: var(--stil); }
+
+/* --- Relatiekaart --- */
+.kaarttitel { font-weight: bold; color: var(--navy); font-size: 17px; }
+.paneel {
+  background: #fff;
+  border: 1px solid var(--lijn);
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.paneel.accent { border-left: 4px solid var(--teal); }
+.paneel h2 {
+  margin: 0 0 14px;
+  font-size: 15px;
+  color: var(--teal-donker);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.raster {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 16px;
+  align-items: end;
+}
+.raster label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--stil);
+}
+.raster .breed { grid-column: span 3; }
+.raster input, .raster select, .raster textarea {
+  padding: 9px 10px;
+  border: 1px solid var(--lijn);
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--inkt);
+  background: #fff;
+}
+.acties { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.melding { color: var(--teal-donker); font-weight: bold; }
+
+/* --- Logboek --- */
+.teller { color: var(--stil); font-weight: normal; }
+.loginvoer { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+.loginvoer textarea {
+  flex: 1;
+  padding: 9px 10px;
+  border: 1px solid var(--lijn);
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: inherit;
+  resize: vertical;
+}
+.loglijst { list-style: none; margin: 0; padding: 0; }
+.loglijst li {
+  border-top: 1px solid var(--lijn);
+  padding: 10px 4px;
+  display: grid;
+  grid-template-columns: 150px 1fr auto;
+  gap: 12px;
+  align-items: start;
+}
+.loglijst .tijd { color: var(--teal-donker); font-size: 13px; font-weight: bold; white-space: nowrap; }
+.loglijst .wis {
+  background: none; border: 0; color: var(--stil);
+  cursor: pointer; font-size: 13px; padding: 0;
+}
+.loglijst .wis:hover { color: var(--rood); }
+
+@media (max-width: 640px) {
+  .raster { grid-template-columns: 1fr; }
+  .raster .breed { grid-column: span 1; }
+  .rij { grid-template-columns: 1fr auto; }
+  .rij .kolomverberg { display: none; }
+  .loglijst li { grid-template-columns: 1fr; gap: 4px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .rij, .knop, .stat { transition: border-color .15s, background .15s; }
+}

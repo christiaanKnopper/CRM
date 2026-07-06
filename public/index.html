@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dialef · Mini CRM</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="merk">DIALEF <span>· Mini CRM</span></div>
+  <div class="stats" id="stats" hidden>
+    <button class="stat" data-filter="alle"><b id="statTotaal">0</b> contacten</button>
+    <button class="stat rood" data-filter="verlopen"><b id="statVerlopen">0</b> verlopen</button>
+    <button class="stat oranje" data-filter="week"><b id="statWeek">0</b> deze week</button>
+  </div>
+  <button id="uitloggen" class="knop-stil" hidden>Uitloggen</button>
+</header>
+
+<!-- LOGIN -->
+<main id="viewLogin" class="view" hidden>
+  <div class="loginkaart">
+    <h1>Inloggen</h1>
+    <p class="stil">Voer het wachtwoord in om bij je relaties te kunnen.</p>
+    <input type="password" id="wachtwoord" placeholder="Wachtwoord" autocomplete="current-password">
+    <button id="loginKnop" class="knop">Inloggen</button>
+    <p class="fout" id="loginFout" hidden>Onjuist wachtwoord.</p>
+  </div>
+</main>
+
+<!-- LIJST -->
+<main id="viewLijst" class="view" hidden>
+  <div class="werkbalk">
+    <input type="search" id="zoek" placeholder="Zoek op naam, bedrijf, plaats of e-mail…">
+    <button id="nieuwContact" class="knop">+ Nieuw contact</button>
+  </div>
+  <div id="lijst" class="lijst"></div>
+  <p id="lijstLeeg" class="leeg" hidden>Nog geen contacten. Voeg je eerste relatie toe met de knop hierboven.</p>
+</main>
+
+<!-- RELATIEKAART -->
+<main id="viewKaart" class="view" hidden>
+  <div class="werkbalk">
+    <button id="terug" class="knop-stil">← Terug naar de lijst</button>
+    <span id="kaartTitel" class="kaarttitel"></span>
+    <button id="verwijderen" class="knop-gevaar" hidden>Verwijderen</button>
+  </div>
+
+  <form id="kaartForm" class="kaart" autocomplete="off">
+    <section class="paneel">
+      <h2>Relatiegegevens</h2>
+      <div class="raster">
+        <label>Voornaam *<input name="voornaam" required></label>
+        <label>Tussenvoegsel<input name="tussenvoegsel"></label>
+        <label>Achternaam *<input name="achternaam" required></label>
+        <label class="breed">Bedrijfsnaam<input name="bedrijf"></label>
+        <label class="breed">Straat + nr<input name="straat"></label>
+        <label>Postcode<input name="postcode"></label>
+        <label>Plaats<input name="plaats"></label>
+        <label class="breed">E-mailadres<input name="email" type="email"></label>
+        <label>Telefoon<input name="telefoon" type="tel"></label>
+        <label>Bron
+          <select name="bron">
+            <option value=""></option>
+            <option>LinkedIn</option><option>Netwerk</option><option>Website</option>
+            <option>Beurs</option><option>Referral</option>
+          </select>
+        </label>
+        <label class="breed">Notities<textarea name="notities" rows="2"></textarea></label>
+      </div>
+    </section>
+
+    <section class="paneel accent">
+      <h2>Vervolgactie</h2>
+      <div class="raster">
+        <label>Datum vervolgactie<input name="vervolgdatum" type="date"></label>
+        <label>Gewenste actie
+          <select name="gewenste_actie">
+            <option value=""></option>
+            <option>Bellen</option><option>Mailen</option><option>Afspraak plannen</option>
+            <option>Offerte sturen</option><option>Demo geven</option>
+            <option>Opvolgen na demo</option><option>LinkedIn-bericht</option>
+            <option>Geen actie</option>
+          </select>
+        </label>
+        <span id="vervolgBadge" class="badge" hidden></span>
+      </div>
+    </section>
+
+    <div class="acties">
+      <button type="submit" class="knop" id="opslaan">Opslaan</button>
+      <span id="opslaanMelding" class="melding" hidden>Opgeslagen ✓</span>
+    </div>
+  </form>
+
+  <section class="paneel" id="logPaneel" hidden>
+    <h2>Contactmomenten <span id="logTeller" class="teller"></span></h2>
+    <div class="loginvoer">
+      <textarea id="logTekst" rows="2" placeholder="Wat is er besproken of gebeurd?"></textarea>
+      <button id="logToevoegen" class="knop">Toevoegen</button>
+    </div>
+    <ul id="logLijst" class="loglijst"></ul>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
