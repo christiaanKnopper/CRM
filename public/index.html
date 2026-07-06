@@ -15,6 +15,7 @@
     <button class="stat rood" data-filter="verlopen"><b id="statVerlopen">0</b> verlopen</button>
     <button class="stat oranje" data-filter="week"><b id="statWeek">0</b> deze week</button>
   </div>
+  <button id="backupKnop" class="knop-stil" hidden>Backup</button>
   <button id="uitloggen" class="knop-stil" hidden>Uitloggen</button>
 </header>
 
@@ -166,6 +167,25 @@
   </div>
   <div class="acties" style="margin-top:14px">
     <button id="actiesSluiten" class="knop-stil" type="button">Sluiten</button>
+  </div>
+</dialog>
+
+<!-- BACKUP & HERSTEL -->
+<dialog id="backupDialog">
+  <h2>Backup &amp; herstel</h2>
+  <p class="stil">Download regelmatig een backup en bewaar die op een veilige plek.
+    Het bestand bevat alle bedrijven, contactpersonen, contactmomenten en acties.</p>
+  <div class="acties">
+    <button id="backupDownload" class="knop" type="button">Backup downloaden</button>
+  </div>
+  <hr class="scheiding">
+  <p class="stil"><b>Herstellen</b> vervangt álle huidige gegevens door de inhoud van het backupbestand.</p>
+  <div class="actieinvoer">
+    <input type="file" id="restoreBestand" accept=".json,application/json">
+    <button id="restoreKnop" class="knop-gevaar" type="button">Herstellen</button>
+  </div>
+  <div class="acties" style="margin-top:14px">
+    <button id="backupSluiten" class="knop-stil" type="button">Sluiten</button>
   </div>
 </dialog>
 

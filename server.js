@@ -17,7 +17,7 @@ const { db, DB_PATH } = require('./db');
 
 // --- Middleware ---
 app.set('trust proxy', 1); // Railway zit achter een proxy
-app.use(express.json());
+app.use(express.json({ limit: '25mb' })); // ruim genoeg voor een restore-bestand
 app.use(cookieSession({
   name: 'dialefcrm',
   secret: SESSION_SECRET,
@@ -217,6 +217,55 @@ app.delete('/api/logboek/:id', eisLogin, (req, res) => {
   const info = db.prepare('DELETE FROM logboek WHERE id=?').run(req.params.id);
   if (!info.changes) return res.status(404).json({ fout: 'Logregel niet gevonden' });
   res.json({ ok: true });
+});
+
+// --- Backup & herstel ---
+const BACKUP_TABELLEN = {
+  bedrijven: ['id', 'naam', 'straat', 'postcode', 'plaats', 'notities', 'aangemaakt', 'gewijzigd'],
+  contacten: ['id', 'voornaam', 'tussenvoegsel', 'achternaam', 'bedrijf_id', 'email', 'telefoon',
+    'bron', 'vervolgdatum', 'gewenste_actie', 'notities', 'aangemaakt', 'gewijzigd'],
+  logboek: ['id', 'contact_id', 'tijdstip', 'tekst'],
+  acties: ['id', 'naam']
+};
+const NUMERIEK = new Set(['id', 'bedrijf_id', 'contact_id']);
+
+app.get('/api/backup', eisLogin, (req, res) => {
+  const datum = new Date().toISOString().slice(0, 10);
+  res.setHeader('Content-Disposition', `attachment; filename="crm-backup-${datum}.json"`);
+  const backup = { app: 'dialef-crm', versie: 1, geexporteerd: new Date().toISOString() };
+  for (const tabel of Object.keys(BACKUP_TABELLEN)) {
+    backup[tabel] = db.prepare(`SELECT * FROM ${tabel}`).all();
+  }
+  res.json(backup);
+});
+
+app.post('/api/restore', eisLogin, (req, res) => {
+  const b = req.body;
+  if (!b || b.app !== 'dialef-crm' ||
+      Object.keys(BACKUP_TABELLEN).some(t => !Array.isArray(b[t]))) {
+    return res.status(400).json({ fout: 'Dit is geen geldig backupbestand van dit CRM' });
+  }
+  try {
+    db.transaction(() => {
+      db.exec('DELETE FROM logboek; DELETE FROM contacten; DELETE FROM bedrijven; DELETE FROM acties;');
+      for (const [tabel, kolommen] of Object.entries(BACKUP_TABELLEN)) {
+        const ins = db.prepare(`INSERT INTO ${tabel} (${kolommen.join(',')})
+          VALUES (${kolommen.map(() => '?').join(',')})`);
+        for (const rij of b[tabel]) {
+          ins.run(...kolommen.map(k => NUMERIEK.has(k)
+            ? (rij[k] === null || rij[k] === undefined || rij[k] === '' ? null : Number(rij[k]))
+            : String(rij[k] ?? '')));
+        }
+      }
+    })();
+    res.json({
+      ok: true,
+      bedrijven: b.bedrijven.length, contacten: b.contacten.length,
+      logregels: b.logboek.length, acties: b.acties.length
+    });
+  } catch (e) {
+    res.status(400).json({ fout: 'Herstellen mislukt, de database is niet gewijzigd: ' + e.message });
+  }
 });
 
 // --- Statistieken voor de kopbalk ---

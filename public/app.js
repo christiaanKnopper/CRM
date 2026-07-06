@@ -17,6 +17,7 @@ function toon(view) {
   const ingelogd = view !== 'login';
   $('#stats').hidden = !ingelogd;
   $('#uitloggen').hidden = !ingelogd;
+  $('#backupKnop').hidden = !ingelogd;
 }
 
 async function api(pad, opties = {}) {
@@ -228,6 +229,28 @@ async function voegActieToe() {
 $('#actieToevoegen').addEventListener('click', voegActieToe);
 $('#actieNieuw').addEventListener('keydown', (e) => { if (e.key === 'Enter') voegActieToe(); });
 $('#actiesSluiten').addEventListener('click', () => $('#actiesDialog').close());
+
+// ---- Backup & herstel ----
+$('#backupKnop').addEventListener('click', () => $('#backupDialog').showModal());
+$('#backupSluiten').addEventListener('click', () => $('#backupDialog').close());
+$('#backupDownload').addEventListener('click', () => { window.location.href = '/api/backup'; });
+
+$('#restoreKnop').addEventListener('click', async () => {
+  const bestand = $('#restoreBestand').files[0];
+  if (!bestand) { alert('Kies eerst een backupbestand.'); return; }
+  if (!confirm('Dit vervangt ALLE huidige gegevens door de inhoud van de backup. Doorgaan?')) return;
+  try {
+    let data;
+    try { data = JSON.parse(await bestand.text()); }
+    catch { throw new Error('Dit is geen geldig backupbestand.'); }
+    const r = await api('/api/restore', { method: 'POST', body: data });
+    alert(`Hersteld: ${r.bedrijven} bedrijven, ${r.contacten} contactpersonen, ` +
+      `${r.logregels} contactmomenten en ${r.acties} acties.`);
+    $('#restoreBestand').value = '';
+    $('#backupDialog').close();
+    naarLijst();
+  } catch (err) { alert(err.message); }
+});
 
 // ---- Contactpersoonkaart ----
 $('#nieuwContact').addEventListener('click', () => openKaart(null));

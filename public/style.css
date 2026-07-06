@@ -211,23 +211,26 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .bedrijfkeuze select { flex: 1; min-width: 0; }
 .bedrijfkeuze .knop-stil { white-space: nowrap; padding: 8px 10px; font-size: 13px; }
 
-/* --- Acties beheren (dialoog) --- */
-#actiesDialog {
+/* --- Dialogen (acties beheren, backup & herstel) --- */
+dialog {
   border: 1px solid var(--lijn);
   border-top: 4px solid var(--teal);
   border-radius: 8px;
   padding: 24px;
   width: min(420px, 90vw);
 }
-#actiesDialog::backdrop { background: rgba(11, 31, 58, .45); }
-#actiesDialog h2 {
+dialog::backdrop { background: rgba(11, 31, 58, .45); }
+dialog h2 {
   margin: 0 0 6px;
   font-size: 15px;
   color: var(--teal-donker);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-#actiesDialog .stil { font-size: 13px; margin: 0 0 12px; }
+dialog .stil { font-size: 13px; margin: 0 0 12px; }
+dialog .acties { margin-bottom: 0; }
+.scheiding { border: 0; border-top: 1px solid var(--lijn); margin: 16px 0; }
+#restoreBestand { flex: 1; min-width: 0; font-size: 13px; color: var(--stil); }
 .actielijst { list-style: none; margin: 0 0 14px; padding: 0; max-height: 40vh; overflow-y: auto; }
 .actielijst li {
   border-top: 1px solid var(--lijn);
