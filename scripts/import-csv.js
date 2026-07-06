@@ -2,6 +2,7 @@
 // Gebruik:  node scripts/import-csv.js pad/naar/contacten.csv
 // Verwachte kolomvolgorde (zoals in het Excel-bestand):
 // voornaam;tussenvoegsel;achternaam;bedrijf;straat;postcode;plaats;email;telefoon;bron;vervolgdatum;gewenste_actie;notities
+// Bedrijven worden automatisch aangemaakt (op naam) en het adres komt bij het bedrijf terecht.
 const fs = require('fs');
 const path = require('path');
 
@@ -55,16 +56,26 @@ const rijen = parseCsv(inhoud, scheider);
 const kopregel = /voornaam/i.test(rijen[0].join(''));
 const data = kopregel ? rijen.slice(1) : rijen;
 
+const vindBedrijf = db.prepare('SELECT id FROM bedrijven WHERE naam=? COLLATE NOCASE');
+const maakBedrijf = db.prepare('INSERT INTO bedrijven (naam,straat,postcode,plaats) VALUES (?,?,?,?)');
+const maakActie = db.prepare('INSERT OR IGNORE INTO acties (naam) VALUES (?)');
 const insert = db.prepare(`INSERT INTO contacten
-  (voornaam,tussenvoegsel,achternaam,bedrijf,straat,postcode,plaats,email,telefoon,bron,vervolgdatum,gewenste_actie,notities)
-  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`);
+  (voornaam,tussenvoegsel,achternaam,bedrijf_id,email,telefoon,bron,vervolgdatum,gewenste_actie,notities)
+  VALUES (?,?,?,?,?,?,?,?,?,?)`);
 
-let ok = 0, over = 0;
+let ok = 0, over = 0, nieuweBedrijven = 0;
 for (const r of data) {
   const v = (i) => (r[i] || '').trim();
   if (!v(0) || !v(2)) { over++; continue; } // voornaam + achternaam verplicht
-  insert.run(v(0), v(1), v(2), v(3), v(4), v(5), v(6), v(7), v(8), v(9), naarIsoDatum(v(10)), v(11), v(12));
+  let bedrijfId = null;
+  if (v(3)) {
+    const bestaand = vindBedrijf.get(v(3));
+    if (bestaand) bedrijfId = bestaand.id;
+    else { bedrijfId = maakBedrijf.run(v(3), v(4), v(5), v(6)).lastInsertRowid; nieuweBedrijven++; }
+  }
+  if (v(11)) maakActie.run(v(11)); // onbekende gewenste actie meteen in de keuzelijst
+  insert.run(v(0), v(1), v(2), bedrijfId, v(7), v(8), v(9), naarIsoDatum(v(10)), v(11), v(12));
   ok++;
 }
-console.log(`Klaar: ${ok} contacten geïmporteerd, ${over} rijen overgeslagen (geen voor- of achternaam).`);
+console.log(`Klaar: ${ok} contacten geïmporteerd (${nieuweBedrijven} nieuwe bedrijven), ${over} rijen overgeslagen (geen voor- of achternaam).`);
 console.log(`Database: ${DB_PATH}`);

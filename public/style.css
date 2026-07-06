@@ -109,6 +109,21 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   font-size: 15px;
 }
 
+/* --- Tabs --- */
+.tabs { display: flex; margin-bottom: 16px; border-bottom: 2px solid var(--lijn); }
+.tab {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 10px 16px;
+  font-size: 15px;
+  color: var(--stil);
+  cursor: pointer;
+}
+.tab.actief { color: var(--navy); font-weight: bold; border-bottom-color: var(--teal); }
+.tab:hover { color: var(--navy); }
+
 /* --- Lijst --- */
 .werkbalk { display: flex; gap: 12px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
 .werkbalk input[type="search"] {
@@ -192,6 +207,49 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 }
 .acties { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .melding { color: var(--teal-donker); font-weight: bold; }
+.bedrijfkeuze { display: flex; gap: 8px; }
+.bedrijfkeuze select { flex: 1; min-width: 0; }
+.bedrijfkeuze .knop-stil { white-space: nowrap; padding: 8px 10px; font-size: 13px; }
+
+/* --- Acties beheren (dialoog) --- */
+#actiesDialog {
+  border: 1px solid var(--lijn);
+  border-top: 4px solid var(--teal);
+  border-radius: 8px;
+  padding: 24px;
+  width: min(420px, 90vw);
+}
+#actiesDialog::backdrop { background: rgba(11, 31, 58, .45); }
+#actiesDialog h2 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  color: var(--teal-donker);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+#actiesDialog .stil { font-size: 13px; margin: 0 0 12px; }
+.actielijst { list-style: none; margin: 0 0 14px; padding: 0; max-height: 40vh; overflow-y: auto; }
+.actielijst li {
+  border-top: 1px solid var(--lijn);
+  padding: 8px 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.actielijst .wis {
+  background: none; border: 0; color: var(--stil);
+  cursor: pointer; font-size: 13px; padding: 0;
+}
+.actielijst .wis:hover { color: var(--rood); }
+.actieinvoer { display: flex; gap: 10px; }
+.actieinvoer input {
+  flex: 1;
+  padding: 9px 10px;
+  border: 1px solid var(--lijn);
+  border-radius: 6px;
+  font-size: 15px;
+}
 
 /* --- Logboek --- */
 .teller { color: var(--stil); font-weight: normal; }

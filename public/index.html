@@ -29,35 +29,57 @@
   </div>
 </main>
 
-<!-- LIJST -->
+<!-- CONTACTPERSONENLIJST -->
 <main id="viewLijst" class="view" hidden>
+  <div class="tabs">
+    <button class="tab actief" type="button">Contactpersonen</button>
+    <button class="tab" id="tabBedrijven" type="button">Bedrijven</button>
+  </div>
   <div class="werkbalk">
     <input type="search" id="zoek" placeholder="Zoek op naam, bedrijf, plaats of e-mail…">
-    <button id="nieuwContact" class="knop">+ Nieuw contact</button>
+    <button id="actiesBeheren" class="knop-stil">Acties beheren</button>
+    <button id="nieuwContact" class="knop">+ Nieuw contactpersoon</button>
   </div>
   <div id="lijst" class="lijst"></div>
-  <p id="lijstLeeg" class="leeg" hidden>Nog geen contacten. Voeg je eerste relatie toe met de knop hierboven.</p>
+  <p id="lijstLeeg" class="leeg" hidden>Nog geen contactpersonen. Voeg je eerste relatie toe met de knop hierboven.</p>
 </main>
 
-<!-- RELATIEKAART -->
+<!-- BEDRIJVENLIJST -->
+<main id="viewBedrijven" class="view" hidden>
+  <div class="tabs">
+    <button class="tab" id="tabContacten" type="button">Contactpersonen</button>
+    <button class="tab actief" type="button">Bedrijven</button>
+  </div>
+  <div class="werkbalk">
+    <input type="search" id="zoekBedrijf" placeholder="Zoek op bedrijfsnaam of plaats…">
+    <button id="nieuwBedrijf" class="knop">+ Nieuw bedrijf</button>
+  </div>
+  <div id="bedrijfLijst" class="lijst"></div>
+  <p id="bedrijfLeeg" class="leeg" hidden>Nog geen bedrijven. Voeg je eerste bedrijf toe met de knop hierboven.</p>
+</main>
+
+<!-- CONTACTPERSOONKAART -->
 <main id="viewKaart" class="view" hidden>
   <div class="werkbalk">
-    <button id="terug" class="knop-stil">← Terug naar de lijst</button>
+    <button id="terug" class="knop-stil">← Terug</button>
     <span id="kaartTitel" class="kaarttitel"></span>
     <button id="verwijderen" class="knop-gevaar" hidden>Verwijderen</button>
   </div>
 
   <form id="kaartForm" class="kaart" autocomplete="off">
     <section class="paneel">
-      <h2>Relatiegegevens</h2>
+      <h2>Contactpersoon</h2>
       <div class="raster">
         <label>Voornaam *<input name="voornaam" required></label>
         <label>Tussenvoegsel<input name="tussenvoegsel"></label>
         <label>Achternaam *<input name="achternaam" required></label>
-        <label class="breed">Bedrijfsnaam<input name="bedrijf"></label>
-        <label class="breed">Straat + nr<input name="straat"></label>
-        <label>Postcode<input name="postcode"></label>
-        <label>Plaats<input name="plaats"></label>
+        <label class="breed">Bedrijf
+          <span class="bedrijfkeuze">
+            <select name="bedrijf_id" id="bedrijfSelect"></select>
+            <button type="button" id="nieuwBedrijfSnel" class="knop-stil" title="Nieuw bedrijf aanmaken">+ Nieuw</button>
+            <button type="button" id="openBedrijf" class="knop-stil" title="Open de bedrijfskaart">Open</button>
+          </span>
+        </label>
         <label class="breed">E-mailadres<input name="email" type="email"></label>
         <label>Telefoon<input name="telefoon" type="tel"></label>
         <label>Bron
@@ -76,13 +98,7 @@
       <div class="raster">
         <label>Datum vervolgactie<input name="vervolgdatum" type="date"></label>
         <label>Gewenste actie
-          <select name="gewenste_actie">
-            <option value=""></option>
-            <option>Bellen</option><option>Mailen</option><option>Afspraak plannen</option>
-            <option>Offerte sturen</option><option>Demo geven</option>
-            <option>Opvolgen na demo</option><option>LinkedIn-bericht</option>
-            <option>Geen actie</option>
-          </select>
+          <select name="gewenste_actie" id="actieSelect"></select>
         </label>
         <span id="vervolgBadge" class="badge" hidden></span>
       </div>
@@ -103,6 +119,55 @@
     <ul id="logLijst" class="loglijst"></ul>
   </section>
 </main>
+
+<!-- BEDRIJFSKAART -->
+<main id="viewBedrijfKaart" class="view" hidden>
+  <div class="werkbalk">
+    <button id="terugBedrijf" class="knop-stil">← Terug naar bedrijven</button>
+    <span id="bedrijfTitel" class="kaarttitel"></span>
+    <button id="bedrijfVerwijderen" class="knop-gevaar" hidden>Verwijderen</button>
+  </div>
+
+  <form id="bedrijfForm" class="kaart" autocomplete="off">
+    <section class="paneel">
+      <h2>Bedrijfsgegevens</h2>
+      <div class="raster">
+        <label class="breed">Bedrijfsnaam *<input name="naam" required></label>
+        <label class="breed">Straat + nr<input name="straat"></label>
+        <label>Postcode<input name="postcode"></label>
+        <label>Plaats<input name="plaats"></label>
+        <label class="breed">Notities<textarea name="notities" rows="2"></textarea></label>
+      </div>
+    </section>
+    <div class="acties">
+      <button type="submit" class="knop">Opslaan</button>
+      <span id="bedrijfMelding" class="melding" hidden>Opgeslagen ✓</span>
+    </div>
+  </form>
+
+  <section class="paneel" id="bedrijfContactenPaneel" hidden>
+    <h2>Contactpersonen <span id="cpTeller" class="teller"></span></h2>
+    <div id="cpLijst" class="lijst"></div>
+    <p id="cpLeeg" class="stil" hidden>Nog geen contactpersonen bij dit bedrijf.</p>
+    <div class="acties" style="margin-top:12px">
+      <button id="cpNieuw" class="knop-stil" type="button">+ Contactpersoon toevoegen</button>
+    </div>
+  </section>
+</main>
+
+<!-- ACTIES BEHEREN -->
+<dialog id="actiesDialog">
+  <h2>Gewenste acties</h2>
+  <p class="stil">Deze acties verschijnen in de keuzelijst bij de vervolgactie.</p>
+  <ul id="actieLijst" class="actielijst"></ul>
+  <div class="actieinvoer">
+    <input id="actieNieuw" placeholder="Nieuwe actie…">
+    <button id="actieToevoegen" class="knop" type="button">Toevoegen</button>
+  </div>
+  <div class="acties" style="margin-top:14px">
+    <button id="actiesSluiten" class="knop-stil" type="button">Sluiten</button>
+  </div>
+</dialog>
 
 <script src="app.js"></script>
 </body>
