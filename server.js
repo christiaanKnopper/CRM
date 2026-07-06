@@ -64,10 +64,12 @@ app.get('/api/contacten', eisLogin, (req, res) => {
       SELECT * FROM contacten
       WHERE (voornaam || ' ' || tussenvoegsel || ' ' || achternaam) LIKE ?
          OR bedrijf LIKE ? OR plaats LIKE ? OR email LIKE ?
-      ORDER BY achternaam COLLATE NOCASE, voornaam COLLATE NOCASE`).all(like, like, like, like);
+      ORDER BY vervolgdatum='', vervolgdatum,
+        achternaam COLLATE NOCASE, voornaam COLLATE NOCASE`).all(like, like, like, like);
   } else {
     rows = db.prepare(`SELECT * FROM contacten
-      ORDER BY achternaam COLLATE NOCASE, voornaam COLLATE NOCASE`).all();
+      ORDER BY vervolgdatum='', vervolgdatum,
+        achternaam COLLATE NOCASE, voornaam COLLATE NOCASE`).all();
   }
   res.json(rows);
 });

@@ -26,7 +26,7 @@ async function api(pad, opties = {}) {
 }
 
 const fmtDatum = (iso) => iso
-  ? new Date(iso + 'T00:00:00').toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  ? new Date(iso + 'T00:00:00').toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: '2-digit' })
   : '';
 const fmtTijd = (iso) => new Date(iso).toLocaleString('nl-NL',
   { timeZone: 'Europe/Amsterdam', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
